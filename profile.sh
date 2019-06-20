@@ -1,9 +1,7 @@
-PATH="${HOME}/.local/bin:${PATH}"
-export GPG_TTY="$(tty)"
-
 declare \
 	-r \
 	newline=$'\n' \
+	profile="${1}" \
 	term_color_blue="$(tput setaf 4)" \
 	term_color_dicky="$(tput setaf 46)" \
 	term_color_gray="$(tput setaf 243)" \
@@ -15,12 +13,64 @@ declare \
 	term_typeface_bold="$(tput bold)" \
 	#
 
-if command -v -- ponysay &> /dev/null
-then
-	ponysay -f raccoon "${term_typeface_bold}${term_color_blue}Otto${term_reset} ~ ${term_typeface_bold}${term_color_lightblue}ponies and raccoons${term_reset} ~ all hail the ${term_typeface_bold}${term_color_dicky}dickbird${term_reset}${newline}sand ${term_typeface_bold}${term_color_red}sharks${term_reset}, mountain ${term_typeface_bold}${term_color_red}sharks${term_reset}, snow ${term_typeface_bold}${term_color_red}sharks${term_reset}, atomic ${term_typeface_bold}${term_color_red}sharks${term_reset}"
-fi
+declare \
+	-r \
+	-A \
+	suggestions=(
+		[sl]=ls
+		[SL]=ls
+		[GIT]=git
+	) \
+	#
 
-source ~/dev/gira/gira.sh
+
+function command_available
+{
+	command -v -- "${1}" &> /dev/null
+}
+
+
+function in_git_repo
+{
+	git \
+		rev-parse \
+		--is-inside-work-tree \
+		&> /dev/null \
+		#
+}
+
+
+function get_git_branch
+{
+	git \
+		rev-parse \
+		--symbolic-full-name \
+		--abbrev-ref \
+		HEAD \
+		2> /dev/null \
+		#
+}
+
+
+function update_git_branch
+{
+	if in_git_repo
+	then
+		branch="$(get_git_branch)"
+	else
+		unset \
+			branch \
+			#
+	fi
+}
+
+
+function cd
+{
+	builtin cd "$@"
+	update_git_branch
+}
+
 
 function prompt_command
 {
@@ -29,27 +79,28 @@ function prompt_command
 		-i \
 		exit_code="$?" \
 		#
-	
+
 	PS1='\[${term_typeface_bold}${term_color_green}\]\u@\h\[${term_reset}\] \[${term_typeface_bold}${term_color_blue}\]\w\[${term_reset}\]'
-	
-	if git rev-parse --is-inside-work-tree &> /dev/null
+
+	if [[ -v branch ]]
 	then
-		branch="$(git rev-parse --symbolic-full-name --abbrev-ref HEAD)"
-		
 		PS1+=' \[${term_color_red}\]${branch}\[${term_reset}\]'
-		
-		if issue_sequence="$(gira_get_sequence "${branch}")"
+
+		if [[ ${profile} == smaato ]]
 		then
-			PS1+=' \[${issue_sequence}\]'
+			if issue_sequence="$(gira_get_sequence "${branch}")"
+			then
+				PS1+=' \[${issue_sequence}\]'
+			fi
 		fi
 	fi
-	
+
 	printf \
 		-v exit_code_padded \
 		'%3i' \
 		${exit_code} \
 		#
-	
+
 	case ${exit_code} in
 		0)
 			exit_code_format="${term_color_green}"
@@ -58,44 +109,10 @@ function prompt_command
 			exit_code_format="${term_typeface_bold}${term_color_red}"
 			;;
 	esac
-	
+
 	PS1+='\n\[${term_typeface_bold}${term_color_orange}\]\A\[${term_reset}\] \[${exit_code_format}\]${exit_code_padded}\[${term_reset}\] \[${term_typeface_bold}${term_color_blue}\]\$\[${term_reset}\] '
 }
 
-PROMPT_COMMAND=prompt_command
-
-PS2='\[${term_color_gray}\]>\[${term_reset}\] '
-
-#function cd
-#{
-#	if [[ -d "${1}/.git" ]]
-#	then
-#		branch="$(
-#			git \
-#				-C "${1}" \
-#				rev-parse \
-#				--symbolic-full-name \
-#				--abbrev-ref \
-#				HEAD \
-#				#
-#		)"
-#	else
-#		unset \
-#			-v \
-#			branch \
-#			#
-#	fi
-#	builtin cd "$@"
-#}
-
-declare \
-	-A \
-	suggestions \
-	#
-
-suggestions[sl]=ls
-suggestions[SL]=ls
-suggestions[GIT]=git
 
 function command_not_found_handle
 {
@@ -118,6 +135,40 @@ function command_not_found_handle
 			echo "                ${tildes}"
 		fi
 	} >&2
-	
+
 	return 127
 }
+
+
+function setup_smaato
+{
+	PATH="${HOME}/.local/bin:${PATH}"
+
+	export GPG_TTY="$(tty)"
+
+	if command_available ponysay
+	then
+		ponysay -f raccoon "${term_typeface_bold}${term_color_blue}Otto${term_reset} ~ ${term_typeface_bold}${term_color_lightblue}ponies and raccoons${term_reset} ~ all hail the ${term_typeface_bold}${term_color_dicky}dickbird${term_reset}${newline}sand ${term_typeface_bold}${term_color_red}sharks${term_reset}, mountain ${term_typeface_bold}${term_color_red}sharks${term_reset}, snow ${term_typeface_bold}${term_color_red}sharks${term_reset}, atomic ${term_typeface_bold}${term_color_red}sharks${term_reset}"
+	fi
+
+	source ~/dev/gira/gira.sh
+}
+
+
+function setup
+{
+	case "${profile}" in
+		smaato)
+			setup_smaato
+			;;
+	esac
+
+	update_git_branch
+
+	PROMPT_COMMAND=prompt_command
+
+	PS2='\[${term_color_gray}\]>\[${term_reset}\] '
+}
+
+
+setup
