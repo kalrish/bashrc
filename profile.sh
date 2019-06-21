@@ -2,13 +2,6 @@ declare \
 	-r \
 	newline=$'\n' \
 	profile="${1}" \
-	term_color_blue="$(tput setaf 4)" \
-	term_color_dicky="$(tput setaf 46)" \
-	term_color_gray="$(tput setaf 243)" \
-	term_color_green="$(tput setaf 2)" \
-	term_color_lightblue="$(tput setaf 51)" \
-	term_color_orange="$(tput setaf 208)" \
-	term_color_red="$(tput setaf 1)" \
 	term_reset="$(tput sgr0)" \
 	term_typeface_bold="$(tput bold)" \
 	#
@@ -16,6 +9,16 @@ declare \
 declare \
 	-r \
 	-A \
+	colors_foreground=(
+		[blue]=4
+		[dicky]=46
+		[gray]=243
+		[green]=2
+		[lightblue]=51
+		[orange]=208
+		[red]=1
+		[white]=255
+	) \
 	suggestions=(
 		[sl]=ls
 		[SL]=ls
@@ -27,6 +30,16 @@ declare \
 function command_available
 {
 	command -v -- "${1}" &> /dev/null
+}
+
+
+function declare_color_foreground
+{
+	declare \
+		-r \
+		-g \
+		"term_color_foreground_${1}=$(tput setaf "${2}")" \
+		#
 }
 
 
@@ -65,12 +78,11 @@ function update_git_branch
 }
 
 
-function cd
-{
-	builtin cd "$@"
-	update_git_branch
-}
-
+last_cwd="${PWD}"
+declare \
+	-i \
+	last_exit_code=0 \
+	#
 
 function prompt_command
 {
@@ -80,37 +92,49 @@ function prompt_command
 		exit_code="$?" \
 		#
 
-	PS1='\[${term_typeface_bold}${term_color_green}\]\u@\h\[${term_reset}\] \[${term_typeface_bold}${term_color_blue}\]\w\[${term_reset}\]'
+	if [[ ${PWD} != ${last_cwd} ]]
+	then
+		last_cwd="${PWD}"
+
+		update_git_branch
+	fi
+
+	PS1='\[${term_typeface_bold}${term_color_foreground_green}\]\u@\h\[${term_reset}\] \[${term_typeface_bold}${term_color_foreground_blue}\]\w\[${term_reset}\]'
 
 	if [[ -v branch ]]
 	then
-		PS1+=' \[${term_color_red}\]${branch}\[${term_reset}\]'
+		PS1+=' \[${term_typeface_bold}${term_color_foreground_red}\]${branch}\[${term_reset}\]'
 
 		if [[ ${profile} == smaato ]]
 		then
 			if issue_sequence="$(gira_get_sequence "${branch}")"
 			then
-				PS1+=' \[${issue_sequence}\]'
+				PS1+=' \[${term_color_foreground_white}${issue_sequence}${term_reset}\]'
 			fi
 		fi
 	fi
 
-	printf \
-		-v exit_code_padded \
-		'%3i' \
-		${exit_code} \
-		#
+	if [[ ${exit_code} != ${last_exit_code} || ! -v exit_code_padded ]]
+	then
+		last_exit_code=${exit_code}
+
+		printf \
+			-v exit_code_padded \
+			'%3i' \
+			${exit_code} \
+			#
+	fi
 
 	case ${exit_code} in
 		0)
-			exit_code_format="${term_color_green}"
+			exit_code_format="${term_color_foreground_green}"
 			;;
 		*)
-			exit_code_format="${term_typeface_bold}${term_color_red}"
+			exit_code_format="${term_typeface_bold}${term_color_foreground_red}"
 			;;
 	esac
 
-	PS1+='\n\[${term_typeface_bold}${term_color_orange}\]\A\[${term_reset}\] \[${exit_code_format}\]${exit_code_padded}\[${term_reset}\] \[${term_typeface_bold}${term_color_blue}\]\$\[${term_reset}\] '
+	PS1+='\n\[${term_typeface_bold}${term_color_foreground_orange}\]\A\[${term_reset}\] \[${exit_code_format}\]${exit_code_padded}\[${term_reset}\] \[${term_typeface_bold}${term_color_foreground_blue}\]\$\[${term_reset}\] '
 }
 
 
@@ -122,11 +146,11 @@ function command_not_found_handle
 		#
 
 	{
-		echo "${term_color_red}${cmd}${term_reset}: command not found"
+		echo "${term_color_foreground_red}${cmd}${term_reset}: command not found"
 		if [[ -v suggestions[${cmd}] ]]
 		then
 			suggestion="${suggestions[${cmd}]}"
-			echo "Maybe you meant ${term_typeface_bold}${term_color_green}${suggestion}${term_reset} instead"
+			echo "Maybe you meant ${term_typeface_bold}${term_color_foreground_green}${suggestion}${term_reset} instead"
 			declare tildes=''
 			for (( i=0 ; i < ${#suggestion} ; ++i ))
 			do
@@ -148,7 +172,7 @@ function setup_smaato
 
 	if command_available ponysay
 	then
-		ponysay -f raccoon "${term_typeface_bold}${term_color_blue}Otto${term_reset} ~ ${term_typeface_bold}${term_color_lightblue}ponies and raccoons${term_reset} ~ all hail the ${term_typeface_bold}${term_color_dicky}dickbird${term_reset}${newline}sand ${term_typeface_bold}${term_color_red}sharks${term_reset}, mountain ${term_typeface_bold}${term_color_red}sharks${term_reset}, snow ${term_typeface_bold}${term_color_red}sharks${term_reset}, atomic ${term_typeface_bold}${term_color_red}sharks${term_reset}"
+		ponysay -f raccoon "${term_typeface_bold}${term_color_foreground_blue}Otto${term_reset} ~ ${term_typeface_bold}${term_color_foreground_lightblue}ponies and raccoons${term_reset} ~ all hail the ${term_typeface_bold}${term_color_foreground_dicky}dickbird${term_reset}${newline}sand ${term_typeface_bold}${term_color_foreground_red}sharks${term_reset}, mountain ${term_typeface_bold}${term_color_foreground_red}sharks${term_reset}, snow ${term_typeface_bold}${term_color_foreground_red}sharks${term_reset}, atomic ${term_typeface_bold}${term_color_foreground_red}sharks${term_reset}"
 	fi
 
 	source ~/dev/gira/gira.sh
@@ -157,6 +181,11 @@ function setup_smaato
 
 function setup
 {
+	for name in "${!colors_foreground[@]}"
+	do
+		declare_color_foreground "${name}" "${colors_foreground[${name}]}"
+	done
+
 	case "${profile}" in
 		smaato)
 			setup_smaato
@@ -167,7 +196,7 @@ function setup
 
 	PROMPT_COMMAND=prompt_command
 
-	PS2='\[${term_color_gray}\]>\[${term_reset}\] '
+	PS2='\[${term_color_foreground_gray}\]>\[${term_reset}\] '
 }
 
 
