@@ -114,7 +114,7 @@ function prompt_command
 		fi
 	fi
 
-	if [[ ${exit_code} != ${last_exit_code} || ! -v exit_code_padded ]]
+	if [[ ${exit_code} -ne ${last_exit_code} || ! -v exit_code_padded ]]
 	then
 		last_exit_code=${exit_code}
 
@@ -123,16 +123,14 @@ function prompt_command
 			'%3i' \
 			${exit_code} \
 			#
-	fi
 
-	case ${exit_code} in
-		0)
+		if [[ ${exit_code} -eq 0 ]]
+		then
 			exit_code_format="${term_color_foreground_green}"
-			;;
-		*)
+		else
 			exit_code_format="${term_typeface_bold}${term_color_foreground_red}"
-			;;
-	esac
+		fi
+	fi
 
 	PS1+='\n\[${term_typeface_bold}${term_color_foreground_orange}\]\A\[${term_reset}\] \[${exit_code_format}\]${exit_code_padded}\[${term_reset}\] \[${term_typeface_bold}${term_color_foreground_blue}\]\$\[${term_reset}\] '
 }
