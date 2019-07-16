@@ -94,9 +94,14 @@ function prompt_command
 
 	if [[ ${PWD} != ${last_cwd} ]]
 	then
+		should_update_git_branch=y
 		last_cwd="${PWD}"
+	fi
 
+	if [[ ${should_update_git_branch} = y ]]
+	then
 		update_git_branch
+		should_update_git_branch=n
 	fi
 
 	PS1='\[${term_typeface_bold}${term_color_foreground_green}\]\u@\h\[${term_reset}\] \[${term_typeface_bold}${term_color_foreground_blue}\]\w\[${term_reset}\]'
@@ -133,6 +138,15 @@ function prompt_command
 	fi
 
 	PS1+='\n\[${term_typeface_bold}${term_color_foreground_orange}\]\A\[${term_reset}\] \[${exit_code_format}\]${exit_code_padded}\[${term_reset}\] \[${term_typeface_bold}${term_color_foreground_blue}\]\$\[${term_reset}\] '
+}
+
+
+function trap_debug
+{
+	if [[ ${BASH_COMMAND} =~ ^[[:space:]]*git[[:space:]][[:space:]]*checkout[[:space:]].*$ ]]
+	then
+		should_update_git_branch=y
+	fi
 }
 
 
@@ -191,6 +205,8 @@ function setup
 	esac
 
 	update_git_branch
+
+	trap trap_debug DEBUG
 
 	PROMPT_COMMAND=prompt_command
 
