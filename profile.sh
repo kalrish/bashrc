@@ -180,8 +180,6 @@ function setup_smaato
 {
 	PATH="${HOME}/.local/bin:${PATH}"
 
-	export GPG_TTY="$(tty)"
-
 	if command_available ponysay
 	then
 		ponysay -f raccoon "${term_typeface_bold}${term_color_foreground_blue}Otto${term_reset} ~ ${term_typeface_bold}${term_color_foreground_lightblue}ponies and raccoons${term_reset} ~ all hail the ${term_typeface_bold}${term_color_foreground_dicky}dickbird${term_reset}${newline}sand ${term_typeface_bold}${term_color_foreground_red}sharks${term_reset}, mountain ${term_typeface_bold}${term_color_foreground_red}sharks${term_reset}, snow ${term_typeface_bold}${term_color_foreground_red}sharks${term_reset}, atomic ${term_typeface_bold}${term_color_foreground_red}sharks${term_reset}"
