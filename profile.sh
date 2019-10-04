@@ -202,6 +202,8 @@ function setup
 			;;
 	esac
 
+	complete -C aws_completer aws
+
 	update_git_branch
 
 	trap trap_debug DEBUG
