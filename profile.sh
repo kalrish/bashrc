@@ -23,6 +23,7 @@ declare \
 		[sl]=ls
 		[SL]=ls
 		[GIT]=git
+		[got]=git
 	) \
 	#
 
@@ -185,7 +186,7 @@ function setup_smaato
 		ponysay -f raccoon "${term_typeface_bold}${term_color_foreground_blue}Otto${term_reset} ~ ${term_typeface_bold}${term_color_foreground_lightblue}ponies and raccoons${term_reset} ~ all hail the ${term_typeface_bold}${term_color_foreground_dicky}dickbird${term_reset}${newline}sand ${term_typeface_bold}${term_color_foreground_red}sharks${term_reset}, mountain ${term_typeface_bold}${term_color_foreground_red}sharks${term_reset}, snow ${term_typeface_bold}${term_color_foreground_red}sharks${term_reset}, atomic ${term_typeface_bold}${term_color_foreground_red}sharks${term_reset}"
 	fi
 
-	source ~/dev/gira/gira.sh
+	source ~/dev/personal/gira/gira.sh
 }
 
 
