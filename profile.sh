@@ -229,6 +229,7 @@ setup
 function ggrep
 {
 	grep \
+		-i \
 		-R \
 		--exclude-dir .git \
 		-- \
