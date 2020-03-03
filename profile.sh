@@ -232,6 +232,7 @@ function ggrep
 		-i \
 		-R \
 		--exclude-dir .git \
+		-C 3 \
 		-- \
 		"$1" \
 		. \
