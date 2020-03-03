@@ -177,6 +177,12 @@ function command_not_found_handle
 }
 
 
+function setup_common
+{
+	:
+}
+
+
 function setup_smaato
 {
 	PATH="${HOME}/.local/bin:${PATH}"
@@ -196,6 +202,8 @@ function setup
 	do
 		declare_color_foreground "${name}" "${colors_foreground[${name}]}"
 	done
+
+	setup_common
 
 	case "${profile}" in
 		smaato)
