@@ -224,3 +224,15 @@ function setup
 
 
 setup
+
+
+function ggrep
+{
+	grep \
+		-R \
+		--exclude-dir .git \
+		-- \
+		"$1" \
+		. \
+		#
+}
