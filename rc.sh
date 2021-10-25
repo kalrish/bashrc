@@ -161,6 +161,22 @@ then
 		echo '    ^^^^^^^'
 	}
 
+	{
+		declare \
+			-a \
+			path_pre_components \
+			#
+
+		path_pre_components+=("${HOME}/.local/bin")
+
+		path_pre=''
+		for path_pre_component in "${path_pre_components[@]}"
+		do
+			path_pre="${path_pre}${path_pre_component}:"
+		done
+		PATH="${path_pre}${PATH}"
+	}
+
 	source \
 		-- \
 		~/dev/own/gira/gira.sh \
