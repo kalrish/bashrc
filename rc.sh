@@ -228,4 +228,14 @@ then
 			. \
 			#
 	}
+
+	function smaato_aws_login
+	{
+		BROWSER='/usr/bin/firefox -P Smaato %s' \
+			aws \
+			--profile "${1}" \
+			sso \
+			login \
+			#
+	}
 fi
