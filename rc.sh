@@ -212,7 +212,9 @@ then
 		-- \
 		cp='cp --no-clobber' \
 		grep='grep --color=auto' \
+		jqless='qless jq' \
 		ls='ls --color=auto' \
+		yqless='qless yq' \
 		#
 
 	function ggrep
@@ -226,6 +228,20 @@ then
 			-- \
 			"$1" \
 			. \
+			#
+	}
+
+	function qless
+	{
+		# Input can be passed through stdin too (and not just from a file)
+		"${1}" \
+			--color-output \
+			. \
+			-- \
+			"${@:2}" \
+		|
+		less \
+			--RAW-CONTROL-CHARS \
 			#
 	}
 
