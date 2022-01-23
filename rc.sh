@@ -113,11 +113,6 @@ then
 		if [[ -v git_branch ]]
 		then
 			PS1+=' \[${_term_typeface_bold}${_term_color_foreground_red}\]${git_branch}\[${_term_reset}\]'
-
-			if jira_issue_sequence="$(gira_get_sequence "${git_branch}")"
-			then
-				PS1+=' \[${_term_color_foreground_white}${jira_issue_sequence}${_term_reset}\]'
-			fi
 		fi
 
 		if [[ ${exit_code} -ne ${last_exit_code} || ! -v exit_code_padded ]]
@@ -193,11 +188,6 @@ then
 		done
 		PATH="${path_pre}${PATH}"
 	}
-
-	source \
-		-- \
-		~/dev/own/gira/gira.sh \
-		#
 
 	if command -v -- aws_completer &> /dev/null
 	then
