@@ -1,3 +1,16 @@
+# static exports
+export \
+	-- \
+	DEB_SIGN_KEYID=32884194D7B577F098AA6E5E4BCC1BAF73B8B7E8 \
+	DEBSIGN_KEYID=32884194D7B577F098AA6E5E4BCC1BAF73B8B7E8 \
+	#
+# $DEB_SIGN_KEYID honored by:
+#   - dpkg-buildpackage(1)
+# $DEBSIGN_KEYID honored by:
+#   - debsign(1)
+#   - dpkg-sig(1)
+
+
 # This is executed by all interactive bash shells on startup,
 # including some (e.g. scp and rcp) that don't expect any output.
 # $- expands to the current option flags, that is:
