@@ -138,24 +138,10 @@ then
 
 	function trap_debug
 	{
-		# Save
-		local \
-			old_BASH_REMATCH=("${BASH_REMATCH[@]}") \
-			#
-
-		# Avoid syntax issues
-		local git_regex='^[[:space:]]*git[[:space:]]+([^[:space:]]+)'
-		if [[ ${BASH_COMMAND} =~ ${git_regex} ]]
+		if [[ ${BASH_COMMAND} == git\ * ]]
 		then
-			case "${BASH_REMATCH[1]}" in
-				checkout|init)
-					update_git_prompt=y
-					;;
-			esac
+			update_git_prompt=y
 		fi
-
-		# Restore
-		BASH_REMATCH=("${old_BASH_REMATCH[@]}")
 	}
 
 	function git_command_suggestion
