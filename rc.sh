@@ -190,6 +190,10 @@ then
 		DEBUG \
 		#
 
+	# Save every line on the history list
+	HISTCONTROL=''
+	HISTIGNORE=''
+
 	PROMPT_COMMAND=prompt_command
 
 	PS2='\[${_term_color_foreground_gray}\]>\[${_term_reset}\] '
