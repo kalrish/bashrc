@@ -185,6 +185,12 @@ then
 
 	git_prompt
 
+	shopt \
+		-s \
+		-- \
+		histappend \
+		#
+
 	trap \
 		trap_debug \
 		DEBUG \
@@ -193,6 +199,8 @@ then
 	# Save every line on the history list
 	HISTCONTROL=''
 	HISTIGNORE=''
+	# Do not remove any entries from the history file
+	HISTFILESIZE=-1
 
 	PROMPT_COMMAND=prompt_command
 
