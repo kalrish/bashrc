@@ -23,18 +23,6 @@ then
 		_term_typeface_bold="$(tput bold)" \
 		#
 
-	declare \
-		-r \
-		-A \
-		-- \
-		_suggestions=(
-			[sl]=ls
-			[SL]=ls
-			[GIT]=git
-			[got]=git
-		) \
-		#
-
 	function in_git_repo
 	{
 		git \
@@ -171,31 +159,6 @@ then
 		echo "To use ${_term_typeface_bold}${_term_color_foreground_blue}${command}${_term_reset}, invoke it through ${_term_typeface_bold}${_term_color_foreground_blue}command${_term_reset}:"
 		echo "  $ ${_term_typeface_bold}${_term_color_foreground_lightblue}command${_term_reset} ${command} ${_term_color_foreground_gray}${command_arguments}${_term_reset} ..."
 		echo '    ^^^^^^^'
-	}
-
-	function command_not_found_handle
-	{
-		declare \
-			-r \
-			cmd="${1}" \
-			#
-
-		{
-			echo "${term_color_foreground_red}${cmd}${term_reset}: command not found"
-			if [[ -v _suggestions[${cmd}] ]]
-			then
-				suggestion="${_suggestions[${cmd}]}"
-				echo "Maybe you meant ${term_typeface_bold}${term_color_foreground_green}${suggestion}${term_reset} instead"
-				declare tildes=''
-				for (( i=0 ; i < ${#suggestion} ; ++i ))
-				do
-					tildes="${tildes}^"
-				done
-				echo "                ${tildes}"
-			fi
-		} >&2
-
-		return 127
 	}
 
 	source \
