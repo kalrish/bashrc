@@ -203,6 +203,8 @@ then
 	HISTFILESIZE=-1
 	# Remember every command in the in-memory history list
 	HISTSIZE=-1
+	# Display dates in history entries according to ISO 8061
+	HISTTIMEFORMAT='%FT%T%z '
 
 	PROMPT_COMMAND=prompt_command
 
