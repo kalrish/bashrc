@@ -166,6 +166,14 @@ then
 		~/dev/own/gira/gira.sh \
 		#
 
+	if command -v -- aws_completer &> /dev/null
+	then
+		complete \
+			-C aws_completer \
+			aws \
+			#
+	fi
+
 	git_prompt
 
 	trap \
