@@ -168,6 +168,10 @@ then
 			#
 
 		path_pre_components+=("${HOME}/.local/bin")
+		if command -v -- ruby &> /dev/null
+		then
+			path_pre_components+=("$(ruby -e 'puts Gem.user_dir')/bin")
+		fi
 
 		path_pre=''
 		for path_pre_component in "${path_pre_components[@]}"
