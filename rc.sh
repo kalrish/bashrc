@@ -240,6 +240,19 @@ then
 			#
 	}
 
+	function mkcd
+	{
+		mkdir \
+			--parents \
+			-- \
+			"$1" \
+			#
+		cd \
+			-- \
+			"$1" \
+			#
+	}
+
 	function qless
 	{
 		# Input can be passed through stdin too (and not just from a file)
