@@ -281,7 +281,7 @@ then
 	{
 		BROWSER='/usr/bin/firefox -P Smaato %s' \
 			aws \
-			--profile "${1}" \
+			--profile "${AWS_PROFILE:-${1}}" \
 			sso \
 			login \
 			#
