@@ -32,6 +32,7 @@ then
 		_term_color_foreground_orange="$(tput setaf 208)" \
 		_term_color_foreground_red="$(tput setaf 1)" \
 		_term_color_foreground_white="$(tput setaf 255)" \
+		_term_color_foreground_yellow="$(tput setaf 3)" \
 		_term_reset="$(tput sgr0)" \
 		_term_typeface_bold="$(tput bold)" \
 		#
@@ -113,6 +114,15 @@ then
 		if [[ -v git_branch ]]
 		then
 			PS1+=' \[${_term_typeface_bold}${_term_color_foreground_red}\]${git_branch}\[${_term_reset}\]'
+		fi
+
+		if [[ -v AWS_PROFILE ]]
+		then
+			PS1+='  \[${_term_color_foreground_yellow}\]AWS:\[${_term_typeface_bold}\]${AWS_PROFILE}\[${_term_reset}\]'
+			if [[ -v AWS_DEFAULT_REGION ]]
+			then
+				PS1+='\[${_term_color_foreground_yellow}\]@\[${_term_typeface_bold}\]${AWS_DEFAULT_REGION}\[${_term_reset}\]'
+			fi
 		fi
 
 		if [[ ${exit_code} -ne ${last_exit_code} || ! -v exit_code_padded ]]
