@@ -227,6 +227,11 @@ then
 
 	# exports
 
+	# The AWS CLI loads its "less sensitive configuration options" from `${HOME}/.aws/config` by default. It can be made to follow the XDG Base Directory Specification[1] and load its configuration from `${XDG_CONFIG_HOME}` instead with the environment variable `AWS_CONFIG_FILE`, according to its documentation[2].
+	# 1: https://specifications.freedesktop.org/basedir-spec/basedir-spec-latest
+	# 2: https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files#cli-configure-files-where
+	AWS_CONFIG_FILE="${XDG_CONFIG_HOME:-${HOME}/.config}/aws/config.ini"
+
 	# The Kubernetes CLI, `kubectl`, loads its configuration from `${HOME}/.kube/config` by default. It can be made to follow the XDG Base Directory Specification[1] and load its configuration from `${XDG_CONFIG_HOME}` instead with the environment variable `KUBECONFIG`.
 	# It can, in fact, load its configuration from multiple files, whereby "[t]he first file to set a particular value or map key wins", according to the documentation[2]. That makes it possible to keep configuration for different sites in separate files.
 	# 1: https://specifications.freedesktop.org/basedir-spec/basedir-spec-latest
@@ -242,6 +247,7 @@ then
 			#
 	)"
 	export \
+		AWS_CONFIG_FILE \
 		KUBECONFIG \
 		#
 
