@@ -231,6 +231,8 @@ then
 	# It can, in fact, load its configuration from multiple files, whereby "[t]he first file to set a particular value or map key wins", according to the documentation[2]. That makes it possible to keep configuration for different sites in separate files.
 	# 1: https://specifications.freedesktop.org/basedir-spec/basedir-spec-latest
 	# 2: https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/
+	# Keep ~/.kube/config for system-specific configuration
+	KUBECONFIG="${HOME}/.kube/config"
 	KUBECONFIG+="$(
 		find \
 			"${XDG_CONFIG_HOME:-${HOME}/.config}/k8s/" \
