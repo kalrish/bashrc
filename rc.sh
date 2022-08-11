@@ -228,8 +228,17 @@ then
 	# exports
 
 	# The Kubernetes CLI, `kubectl`, loads its configuration from `${HOME}/.kube/config` by default. It can be made to follow the XDG Base Directory Specification[1] and load its configuration from `${XDG_CONFIG_HOME}` instead with the environment variable `KUBECONFIG`.
+	# It can, in fact, load its configuration from multiple files, whereby "[t]he first file to set a particular value or map key wins", according to the documentation[2]. That makes it possible to keep configuration for different sites in separate files.
 	# 1: https://specifications.freedesktop.org/basedir-spec/basedir-spec-latest
-	KUBECONFIG="${XDG_CONFIG_HOME:-${HOME}/.config}/k8s/config.yaml"
+	# 2: https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/
+	KUBECONFIG+="$(
+		find \
+			"${XDG_CONFIG_HOME:-${HOME}/.config}/k8s/" \
+			-type f \
+			-name '*.yaml' \
+			-printf ':%p' \
+			#
+	)"
 	export \
 		KUBECONFIG \
 		#
