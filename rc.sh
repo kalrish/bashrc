@@ -225,6 +225,16 @@ then
 	PS2='\[${_term_color_foreground_gray}\]>\[${_term_reset}\] '
 
 
+	# exports
+
+	# The Kubernetes CLI, `kubectl`, loads its configuration from `${HOME}/.kube/config` by default. It can be made to follow the XDG Base Directory Specification[1] and load its configuration from `${XDG_CONFIG_HOME}` instead with the environment variable `KUBECONFIG`.
+	# 1: https://specifications.freedesktop.org/basedir-spec/basedir-spec-latest
+	KUBECONFIG="${XDG_CONFIG_HOME:-${HOME}/.config}/k8s/config.yaml"
+	export \
+		KUBECONFIG \
+		#
+
+
 	# User functions and aliases
 	# These should be made available only to interactive sessions, because scripts usually should not rely on non-standard functionality.
 
