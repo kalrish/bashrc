@@ -231,12 +231,28 @@ then
 	#  - ship a system initialization script at the specified path that loads bash-completion.
 	# Arch does this.
 	# For a Bash initialization script to be compatible with all distributions, however, it must load bash-completion itself.
+	# This condition also helps with completion scripts that depend on bash-completion.
 	if [[ -r /usr/share/bash-completion/bash_completion ]]
 	then
 		source \
 			-- \
 			/usr/share/bash-completion/bash_completion \
 			#
+
+		# According to the documentation[1], the Bash completion script for kubectl requires bash-completion
+		# 1: https://kubernetes.io/docs/tasks/tools/included/optional-kubectl-configs-bash-linux/
+		if command -v -- kubectl &> /dev/null
+		then
+			source \
+				-- \
+				<(
+					kubectl \
+						completion \
+						bash \
+						#
+				) \
+				#
+		fi
 	fi
 
 
