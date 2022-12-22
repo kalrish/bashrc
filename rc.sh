@@ -225,6 +225,21 @@ then
 	PS2='\[${_term_color_foreground_gray}\]>\[${_term_reset}\] '
 
 
+	# Load bash-completion
+	# Loading bash-completion in the personal initialization script is not necessary on distributions that:
+	#  - build Bash with `-DSYS_BASHRC=`, by which Bash loads the script at the specified path, often `/etc/bash.bashrc`, in addition to the personal initialization script; and
+	#  - ship a system initialization script at the specified path that loads bash-completion.
+	# Arch does this.
+	# For a Bash initialization script to be compatible with all distributions, however, it must load bash-completion itself.
+	if [[ -r /usr/share/bash-completion/bash_completion ]]
+	then
+		source \
+			-- \
+			/usr/share/bash-completion/bash_completion \
+			#
+	fi
+
+
 	# exports
 
 	# The AWS CLI loads its "less sensitive configuration options" from `${HOME}/.aws/config` by default. It can be made to follow the XDG Base Directory Specification[1] and load its configuration from `${XDG_CONFIG_HOME}` instead with the environment variable `AWS_CONFIG_FILE`, according to its documentation[2].
