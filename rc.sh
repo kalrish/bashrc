@@ -253,20 +253,6 @@ then
 				) \
 				#
 		fi
-
-		# The Bash completion script for Poetry requires bash-completion
-		if command -v -- poetry &> /dev/null
-		then
-			source \
-				-- \
-				<(
-					poetry \
-						completions \
-						bash \
-						#
-				) \
-				#
-		fi
 	fi
 
 
