@@ -259,10 +259,19 @@ then
 			#
 	)"
 
+	SSH_AUTH_SOCK="$(
+		gpgconf \
+			--list-dirs \
+			-- \
+			agent-ssh-socket \
+			#
+	)"
+
 	export \
 		-- \
 		AWS_CONFIG_FILE \
 		KUBECONFIG \
+		SSH_AUTH_SOCK \
 		#
 
 
