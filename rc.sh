@@ -260,6 +260,7 @@ then
 	)"
 
 	export \
+		-- \
 		AWS_CONFIG_FILE \
 		KUBECONFIG \
 		#
