@@ -258,6 +258,7 @@ then
 			-printf ':%p' \
 			#
 	)"
+
 	export \
 		AWS_CONFIG_FILE \
 		KUBECONFIG \
