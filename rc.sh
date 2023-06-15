@@ -207,8 +207,8 @@ then
 		DEBUG \
 		#
 
-	# Save every line on the history list
-	HISTCONTROL=''
+	# Save all lines except those that begin with a space character on the history list
+	HISTCONTROL=ignorespace
 	HISTIGNORE=''
 	# Do not remove any entries from the history file
 	HISTFILESIZE=-1
