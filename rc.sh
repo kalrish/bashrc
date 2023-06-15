@@ -287,6 +287,22 @@ then
 		yqless='qless yq' \
 		#
 
+	function evoila_Kostenabrechnung
+	{
+		declare \
+			-r \
+			-- \
+			year="${1}" \
+			month="${2}" \
+			#
+		pdfunite \
+			-- \
+			"${HOME}/documents/Arbeitgeber/evoila/Kostenabrechnungen/${year}/${month}/Abrechnung.pdf" \
+			"${HOME}/documents/Arbeitgeber/evoila/Kostenabrechnungen/${year}/${month}/Beleg"-*.pdf \
+			"${HOME}/documents/Arbeitgeber/evoila/Kostenabrechnungen/${year}/${month}.pdf" \
+			#
+	}
+
 	function ggrep
 	{
 		grep \
