@@ -321,6 +321,76 @@ then
 			#
 	}
 
+	function GnuPG_publish
+	{
+		declare \
+			-A \
+			-- \
+			keys=( \
+				[own]=E0C3497126B72CA47975FC322953BB8C16043B43 \
+				[evoila]=EA44799B216D935609758EA027630D6641272649 \
+			) \
+			#
+
+		# Upload public keys to configured keyserver
+		gpg \
+			--send-keys \
+			-- \
+			${keys[@]} \
+			#
+
+		# Upload public keys to keys.openpgp.org
+		for fingerprint in ${keys[@]}
+		do
+			{
+				gpg \
+					--export \
+					-- \
+					${fingerprint} \
+					#
+			} \
+			|
+			{
+				curl \
+					--upload-file - \
+					-- \
+					https://keys.openpgp.org/ \
+					#
+			}
+		done
+
+		# Upload public keys to GitHub
+		for label in ${!keys[@]}
+		do
+			gh \
+				gpg-key \
+				delete \
+				--yes \
+				-- \
+				${keys[${label}]: -16}
+			{
+				gpg \
+					--export \
+					--armor \
+					-- \
+					${keys[${label}]} \
+					#
+			} \
+			|
+			{
+				gh \
+					gpg-key \
+					add \
+					--title=${label} \
+					#
+			}
+		done
+
+		# TODO: gitlab.com
+		# TODO: gitlab.freedesktop.org
+		# TODO: Keybase
+	}
+
 	function mkcd
 	{
 		mkdir \
