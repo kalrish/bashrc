@@ -259,6 +259,8 @@ then
 			#
 	)"
 
+	npm_config_userconfig="${XDG_CONFIG_HOME:-${HOME}/.config}/npm/npmrc"
+
 	SSH_AUTH_SOCK="$(
 		gpgconf \
 			--list-dirs \
@@ -271,6 +273,7 @@ then
 		-- \
 		AWS_CONFIG_FILE \
 		KUBECONFIG \
+		npm_config_userconfig \
 		SSH_AUTH_SOCK \
 		#
 
