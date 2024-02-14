@@ -210,6 +210,8 @@ then
 	# Save all lines except those that begin with a space character on the history list
 	HISTCONTROL=ignorespace
 	HISTIGNORE=''
+	# XDG
+	HISTFILE="${XDG_STATE_HOME:-${HOME}/.local/state}/bash/history"
 	# Do not remove any entries from the history file
 	HISTFILESIZE=-1
 	# Remember every command in the in-memory history list
